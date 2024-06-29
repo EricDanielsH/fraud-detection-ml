@@ -36,3 +36,6 @@ features = scaler.fit_transform(features)
 # print(df)
 # print(df[numerical_fields])
 
+# Split the data into training and testing sets
+features_train, features_test, target_train, target_test = train_test_split(features, target, test_size = 0.2, random_state=42)
+
