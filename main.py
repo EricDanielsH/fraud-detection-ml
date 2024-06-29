@@ -3,6 +3,10 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+
 
 # Load the data to a DataFrame
 df = pd.read_csv("creditcard.csv")
@@ -43,3 +47,17 @@ features_train, features_test, target_train, target_test = train_test_split(feat
 # print(f'X_test shape: {features_test.shape}')
 # print(f'y_train shape: {target_train.shape}')
 # print(f'y_test shape: {target_test.shape}')
+
+# Create different pipelines for different models
+# Logistic Regression Pipeline
+lr_pipeline = Pipeline(steps=[('scaler', StandardScaler()), ('classifier', LogisticRegression())])
+# Random Forest Pipeline
+rf_pipeline = Pipeline(steps=[('scaler', StandardScaler()), ('classifier', RandomForestClassifier())])
+# Gradient Boosting Pipeline
+gb_pipeline = Pipeline(steps=[('scaler', StandardScaler()), ('classifier', GradientBoostingClassifier())])
+
+pipelines = [lr_pipeline, rf_pipeline, gb_pipeline]
+
+# Train the models
+for pipeline in pipelines:
+    pipeline.fit(features_train, target_train)
