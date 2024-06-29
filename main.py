@@ -39,3 +39,7 @@ features = scaler.fit_transform(features)
 # Split the data into training and testing sets
 features_train, features_test, target_train, target_test = train_test_split(features, target, test_size = 0.2, random_state=42)
 
+# print(f'X_train shape: {features_train.shape}')
+# print(f'X_test shape: {features_test.shape}')
+# print(f'y_train shape: {target_train.shape}')
+# print(f'y_test shape: {target_test.shape}')
