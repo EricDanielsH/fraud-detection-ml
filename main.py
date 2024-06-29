@@ -6,17 +6,18 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import classification_report, roc_auc_score
 
 
 # Load the data to a DataFrame
 df = pd.read_csv("creditcard.csv")
 
 # Print basic information about the data to understand it
-print(df.info())
-print("====================================================")
-print(df.describe())
-print("====================================================")
-print(df.head())
+# print(df.info())
+# print("====================================================")
+# print(df.describe())
+# print("====================================================")
+# print(df.head())
 
 # Check for any missing values in any field
 print(df.isnull().sum())
@@ -27,14 +28,6 @@ print(df.dropna())
 # Separate Features from the Target
 features = df.drop(columns=['Class'])
 target = df['Class']
-
-# Normalise numericals fields
-numerical_fields = features.select_dtypes(include=['int64', 'float64']).columns
-# Create a scaler object
-scaler = StandardScaler()
-
-# Scale numerical fields
-features = scaler.fit_transform(features)
 
 # See the difference with the original dataset
 # print(df)
@@ -61,3 +54,18 @@ pipelines = [lr_pipeline, rf_pipeline, gb_pipeline]
 # Train the models
 for pipeline in pipelines:
     pipeline.fit(features_train, target_train)
+
+# Evaluate the model
+for pipeline in pipelines:
+    # Predict the class labels for the testing training set
+    target_pred = pipeline.predict(features_train)
+    # Predict the probability estimates for the positive class(1). ROC AUC
+    target_prob = pipeline.predict_proba(features_train)[:, 1]
+
+    # Print clasification report
+    print("Clasification report: ")
+    print(classification_report(target_train, target_pred))
+    
+    # Calculate the ROC AUC score
+    print("ROC-AUC score: ")
+    print("ROC-AUC: ", roc_auc_score(target_train, target_prob), "\n")
