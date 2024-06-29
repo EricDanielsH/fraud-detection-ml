@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.metrics import classification_report, roc_auc_score
-
+from sklearn.model_selection import GridSearchCV
 
 # Load the data to a DataFrame
 df = pd.read_csv("creditcard.csv")
@@ -69,3 +69,18 @@ for pipeline in pipelines:
     # Calculate the ROC AUC score
     print("ROC-AUC score: ")
     print("ROC-AUC: ", roc_auc_score(target_train, target_prob), "\n")
+
+    
+# Optimise the model:
+
+# Example: Grid Search for Random Forest
+param_grid = {
+    'classifier__n_estimators': [100, 200, 300],
+    'classifier__max_depth': [10, 20, 30]
+}
+
+grid_search = GridSearchCV(rf_pipeline, param_grid, cv=5, scoring='roc_auc')
+grid_search.fit(features_train, target_train)
+
+print("Best parameters:", grid_search.best_params_)
+print("Best score:", grid_search.best_score_)
